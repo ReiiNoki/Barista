@@ -71,6 +71,7 @@ interface CoffeeLog {
   // Common
   caffeineMg: number;
   note?: string;
+  review?: BeanReview;
 }
 
 interface AppSettings {
@@ -217,6 +218,8 @@ const DICTIONARY = {
     flavors: 'Flavors',
     defaultReviewMode: 'Default Review Mode',
     noReview: 'No review yet',
+    deleteConfirm: 'Delete this record?',
+    deleteBeanConfirm: 'Delete this bean?',
   },
   zh: {
     dashboard: '概览',
@@ -311,6 +314,8 @@ const DICTIONARY = {
     flavors: '风味标签',
     defaultReviewMode: '默认评价模式',
     noReview: '暂无评价',
+    deleteConfirm: '确认删除这条记录吗？',
+    deleteBeanConfirm: '确认删除这支豆子吗？',
   },
   ja: {
     dashboard: 'ホーム',
@@ -405,6 +410,8 @@ const DICTIONARY = {
     flavors: 'フレーバー',
     defaultReviewMode: 'デフォルト評価モード',
     noReview: 'レビューなし',
+    deleteConfirm: 'この記録を削除しますか？',
+    deleteBeanConfirm: 'この豆を削除しますか？',
   },
 };
 
@@ -451,26 +458,27 @@ const getTodayTotal = (logs: CoffeeLog[]) => {
 
 // --- 图标组件 (Icons) ---
 const Icons = {
-  Coffee: () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M17 8h1a4 4 0 1 1 0 8h-1"/><path d="M3 8h14v9a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4Z"/><line x1="6" x2="6" y1="2" y2="4"/><line x1="10" x2="10" y1="2" y2="4"/><line x1="14" x2="14" y1="2" y2="4"/></svg>,
-  Bean: () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M10.165 6.598C9.954 7.478 9.64 8.36 9 9c-.64.64-1.521.954-2.402 1.165A6 6 0 0 0 8 22c1.237 0 2.399-.5 3.268-1.291a6.09 6.09 0 0 1 .55-.55c.194-.194.437-.38.751-.551.315-.172.695-.308 1.133-.308.438 0 .818.136 1.133.308.438 0 .818.136 1.133.308.314.172.557.357.75.551.05.05.1.101.147.153A6.038 6.038 0 0 0 19 21a6 6 0 0 0-6-6 6.09 6.09 0 0 1-2.835-1.402z"/><path d="M5.341 10.62a6 6 0 1 0 5.279-5.28"/></svg>,
-  Plus: () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>,
-  Settings: () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.09a2 2 0 0 1-1-1.74v-.47a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.35a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>,
-  Trash: () => <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>,
-  X: () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>,
-  Check: () => <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>,
-  Home: () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>,
-  Calendar: () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/></svg>,
-  Search: () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>,
-  ChevronLeft: () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m15 18-6-6 6-6"/></svg>,
-  ChevronRight: () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m9 18 6-6-6-6"/></svg>,
-  LayoutDashboard: () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/></svg>,
-  Moon: () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>,
-  Sun: () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>,
-  Sparkles: () => <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L12 3Z"/><path d="M5 3v4"/><path d="M9 5H1"/><path d="M19.5 7.5 21 12l1.5-4.5L24 6l-1.5-1.5L21 0l-1.5 4.5L18 6l1.5 1.5Z"/></svg>,
-  ThumbsUp: () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M7 10v12"/><path d="M15 5.88 14 10h5.83a2 2 0 0 1 1.92 2.56l-2.33 8A2 2 0 0 1 17.5 22H4a2 2 0 0 1-2-2v-8a2 2 0 0 1 2-2h2.76a2 2 0 0 0 1.79-1.11L12 2h0a3.13 3.13 0 0 1 3 3.88Z"/></svg>,
-  ThumbsDown: () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M17 14V2"/><path d="M9 18.12 10 14H4.17a2 2 0 0 1-1.92-2.56l2.33-8A2 2 0 0 1 6.5 2H19a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2h-2.76a2 2 0 0 0-1.79 1.11L12 22h0a3.13 3.13 0 0 1-3-3.88Z"/></svg>,
-  Star: ({ filled }: { filled?: boolean }) => <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill={filled ? "currentColor" : "none"} stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" /></svg>,
-  Review: () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>,
+  Coffee: (props: React.SVGProps<SVGSVGElement>) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><path d="M17 8h1a4 4 0 1 1 0 8h-1"/><path d="M3 8h14v9a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4Z"/><line x1="6" x2="6" y1="2" y2="4"/><line x1="10" x2="10" y1="2" y2="4"/><line x1="14" x2="14" y1="2" y2="4"/></svg>,
+  Bean: (props: React.SVGProps<SVGSVGElement>) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><path d="M10.165 6.598C9.954 7.478 9.64 8.36 9 9c-.64.64-1.521.954-2.402 1.165A6 6 0 0 0 8 22c1.237 0 2.399-.5 3.268-1.291a6.09 6.09 0 0 1 .55-.55c.194-.194.437-.38.751-.551.315-.172.695-.308 1.133-.308.438 0 .818.136 1.133.308.438 0 .818.136 1.133.308.438 0 .818.136 1.133.308.438 0 .818.136 1.133.308.314.172.557.357.75.551.05.05.1.101.147.153A6.038 6.038 0 0 0 19 21a6 6 0 0 0-6-6 6.09 6.09 0 0 1-2.835-1.402z"/><path d="M5.341 10.62a6 6 0 1 0 5.279-5.28"/></svg>,
+  Plus: (props: React.SVGProps<SVGSVGElement>) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>,
+  Settings: (props: React.SVGProps<SVGSVGElement>) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.09a2 2 0 0 1-1-1.74v-.47a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.35a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>,
+  Trash: (props: React.SVGProps<SVGSVGElement>) => <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>,
+  X: (props: React.SVGProps<SVGSVGElement>) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>,
+  Check: (props: React.SVGProps<SVGSVGElement>) => <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" {...props}><polyline points="20 6 9 17 4 12"></polyline></svg>,
+  Home: (props: React.SVGProps<SVGSVGElement>) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>,
+  Calendar: (props: React.SVGProps<SVGSVGElement>) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/></svg>,
+  Search: (props: React.SVGProps<SVGSVGElement>) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>,
+  ChevronLeft: (props: React.SVGProps<SVGSVGElement>) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><path d="m15 18-6-6 6-6"/></svg>,
+  ChevronRight: (props: React.SVGProps<SVGSVGElement>) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><path d="m9 18 6-6-6-6"/></svg>,
+  LayoutDashboard: (props: React.SVGProps<SVGSVGElement>) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/></svg>,
+  Moon: (props: React.SVGProps<SVGSVGElement>) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>,
+  Sun: (props: React.SVGProps<SVGSVGElement>) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>,
+  Sparkles: (props: React.SVGProps<SVGSVGElement>) => <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L12 3Z"/><path d="M5 3v4"/><path d="M9 5H1"/><path d="M19.5 7.5 21 12l1.5-4.5L24 6l-1.5-1.5L21 0l-1.5 4.5L18 6l1.5 1.5Z"/></svg>,
+  ThumbsUp: (props: React.SVGProps<SVGSVGElement>) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><path d="M7 10v12"/><path d="M15 5.88 14 10h5.83a2 2 0 0 1 1.92 2.56l-2.33 8A2 2 0 0 1 17.5 22H4a2 2 0 0 1-2-2v-8a2 2 0 0 1 2-2h2.76a2 2 0 0 0 1.79-1.11L12 2h0a3.13 3.13 0 0 1 3 3.88Z"/></svg>,
+  ThumbsDown: (props: React.SVGProps<SVGSVGElement>) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><path d="M17 14V2"/><path d="M9 18.12 10 14H4.17a2 2 0 0 1-1.92-2.56l2.33-8A2 2 0 0 1 6.5 2H19a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2h-2.76a2 2 0 0 0-1.79 1.11L12 22h0a3.13 3.13 0 0 1-3-3.88Z"/></svg>,
+  Star: ({ filled, ...props }: { filled?: boolean } & React.SVGProps<SVGSVGElement>) => <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill={filled ? "currentColor" : "none"} stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" /></svg>,
+  Review: (props: React.SVGProps<SVGSVGElement>) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>,
+  Edit: (props: React.SVGProps<SVGSVGElement>) => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"/></svg>,
 };
 
 // --- 子组件 (Sub-Components) ---
@@ -648,25 +656,27 @@ const MobileTabBar = ({ activeTab, onChange, onAdd, t }: { activeTab: ViewState,
   </div>
 );
 
-const ReviewModalContent = ({ bean, onSave, defaultMode, t }: { bean: Bean, onSave: (r: BeanReview) => void, defaultMode: ReviewMode, t: any }) => {
+const ReviewModalContent = ({ initialReview, onSave, defaultMode, t }: { initialReview?: BeanReview, onSave: (r: BeanReview) => void, defaultMode: ReviewMode, t: any }) => {
   const [mode, setMode] = useState<ReviewMode>(defaultMode);
-  const [rebuy, setRebuy] = useState(bean.review?.rebuy ?? false);
-  const [note, setNote] = useState(bean.review?.note ?? '');
+  const [rebuy, setRebuy] = useState(initialReview?.rebuy ?? false);
+  const [note, setNote] = useState(initialReview?.note ?? '');
   
   // Casual
-  const [rating, setRating] = useState(bean.review?.rating ?? 0);
+  const [rating, setRating] = useState(initialReview?.rating ?? 0);
   
   // Barista
-  const [baristaScore, setBaristaScore] = useState(bean.review?.baristaScore ?? { acidity: 3, sweetness: 3, body: 3, bitterness: 3, aftertaste: 3 });
-  const [selectedFlavors, setSelectedFlavors] = useState<string[]>(bean.review?.flavors ?? []);
+  const [baristaScore, setBaristaScore] = useState(initialReview?.baristaScore ?? { acidity: 3, sweetness: 3, body: 3, bitterness: 3, aftertaste: 3 });
+  const [selectedFlavors, setSelectedFlavors] = useState<string[]>(initialReview?.flavors ?? []);
   
   // Expert
-  const [expertScore, setExpertScore] = useState(bean.review?.expertScore ?? { aroma: 8, flavor: 8, aftertaste: 8, acidity: 8, body: 8, balance: 8, uniformity: 10, cleanCup: 10, sweetness: 10, overall: 8, total: 0 });
+  const [expertScore, setExpertScore] = useState(initialReview?.expertScore ?? { aroma: 8, flavor: 8, aftertaste: 8, acidity: 8, body: 8, balance: 8, uniformity: 10, cleanCup: 10, sweetness: 10, overall: 8, total: 0 });
 
   useEffect(() => {
     // Recalculate Expert Total
-    const total = Object.values(expertScore).reduce((a, b) => a + b, 0) - expertScore.total;
-    if (total !== expertScore.total) setExpertScore(p => ({ ...p, total }));
+    const values = Object.values(expertScore) as number[];
+    const sum = values.reduce((a, b) => a + b, 0);
+    const calculatedTotal = sum - expertScore.total;
+    if (calculatedTotal !== expertScore.total) setExpertScore(p => ({ ...p, total: calculatedTotal }));
   }, [expertScore]);
 
   const toggleFlavor = (f: string) => {
@@ -763,11 +773,6 @@ const ReviewModalContent = ({ bean, onSave, defaultMode, t }: { bean: Bean, onSa
 };
 
 const InventoryView = ({ beans, onAdd, onToggle, onSaveReview, defaultReviewMode, t }: { beans: Bean[], onAdd: (b: Omit<Bean, 'id' | 'isActive'>) => void, onToggle: (id: string) => void, onSaveReview: (id: string, r: BeanReview) => void, defaultReviewMode: ReviewMode, t: any }) => {
-  const [brand, setBrand] = useState('');
-  const [name, setName] = useState('');
-  const [roast, setRoast] = useState<RoastLevel>('medium');
-  const [process, setProcess] = useState<ProcessMethod>('washed');
-  const [weight, setWeight] = useState<number>(200);
   const [isAdding, setIsAdding] = useState(false);
   const [reviewingBean, setReviewingBean] = useState<Bean | null>(null);
 
@@ -780,11 +785,50 @@ const InventoryView = ({ beans, onAdd, onToggle, onSaveReview, defaultReviewMode
     return groups;
   }, [beans]);
 
-  const submit = () => {
-    if (!brand || !name) return;
-    onAdd({ brand, name, roast, process, weight });
-    setBrand(''); setName(''); setWeight(200);
-    setIsAdding(false);
+  const AddBeanForm = () => {
+    const [brand, setBrand] = useState('');
+    const [name, setName] = useState('');
+    const [roast, setRoast] = useState<RoastLevel>('medium');
+    const [process, setProcess] = useState<ProcessMethod>('washed');
+    const [weight, setWeight] = useState<number>(200);
+
+    const submit = () => {
+      if (!brand || !name) return;
+      onAdd({ brand, name, roast, process, weight });
+      setBrand(''); setName(''); setWeight(200);
+      setIsAdding(false);
+    };
+
+    return (
+       <div className="space-y-4">
+          <div>
+            <label className="text-xs text-stone-500 font-bold uppercase ml-1 mb-1 block">{t.brand}</label>
+            <input value={brand} onChange={e => setBrand(e.target.value)} placeholder="e.g. Blue Bottle" className="w-full p-3 bg-stone-50 dark:bg-stone-800 rounded-xl border-none text-[#3E2723] dark:text-stone-200 placeholder-stone-400 focus:ring-2 focus:ring-[#5C4033]/20" />
+          </div>
+          <div>
+            <label className="text-xs text-stone-500 font-bold uppercase ml-1 mb-1 block">{t.beanName}</label>
+            <input value={name} onChange={e => setName(e.target.value)} placeholder="e.g. Bella Donovan" className="w-full p-3 bg-stone-50 dark:bg-stone-800 rounded-xl border-none text-[#3E2723] dark:text-stone-200 placeholder-stone-400 focus:ring-2 focus:ring-[#5C4033]/20" />
+          </div>
+          <div className="grid grid-cols-2 gap-4">
+             <div>
+                <label className="text-xs text-stone-500 font-bold uppercase ml-1 mb-1 block">{t.roast}</label>
+                <select value={roast} onChange={e => setRoast(e.target.value as any)} className="w-full p-3 bg-stone-50 dark:bg-stone-800 rounded-xl border-none text-[#3E2723] dark:text-stone-200">{(['light', 'medium', 'dark'] as const).map(r => <option key={r} value={r}>{t[r]}</option>)}</select>
+             </div>
+             <div>
+                <label className="text-xs text-stone-500 font-bold uppercase ml-1 mb-1 block">{t.process}</label>
+                <select value={process} onChange={e => setProcess(e.target.value as any)} className="w-full p-3 bg-stone-50 dark:bg-stone-800 rounded-xl border-none text-[#3E2723] dark:text-stone-200">{(['washed', 'natural', 'honey', 'anaerobic', 'other'] as const).map(p => <option key={p} value={p}>{t[p]}</option>)}</select>
+             </div>
+          </div>
+          <div>
+            <label className="text-xs text-stone-500 font-bold uppercase ml-1 mb-1 block">{t.weight}</label>
+            <div className="relative">
+              <input type="number" value={weight} onChange={e => setWeight(Number(e.target.value))} className="w-full p-3 bg-stone-50 dark:bg-stone-800 rounded-xl border-none text-[#3E2723] dark:text-stone-200 font-bold" />
+              <span className="absolute right-4 top-3 text-stone-400 text-sm">{t.grams}</span>
+            </div>
+          </div>
+          <button onClick={submit} disabled={!brand || !name} className="w-full p-4 mt-2 bg-stone-800 dark:bg-stone-700 text-white font-bold rounded-xl hover:bg-black disabled:opacity-50 shadow-lg">{t.save}</button>
+       </div>
+    );
   };
 
   return (
@@ -798,51 +842,23 @@ const InventoryView = ({ beans, onAdd, onToggle, onSaveReview, defaultReviewMode
               <span>{t.activeCount}: <strong className="text-stone-800 dark:text-stone-200">{beans.filter(b => b.isActive).length}</strong></span>
             </div>
          </div>
-         <button onClick={() => setIsAdding(!isAdding)} className="bg-[#5C4033] text-white px-4 py-2 rounded-xl text-sm font-bold shadow-md hover:bg-[#4a332a] transition-all flex items-center gap-2">
-           {isAdding ? <Icons.X /> : <Icons.Plus />}
+         <button onClick={() => setIsAdding(true)} className="bg-[#5C4033] text-white px-4 py-2 rounded-xl text-sm font-bold shadow-md hover:bg-[#4a332a] transition-all flex items-center gap-2">
+           <Icons.Plus />
            {t.addNewBean}
          </button>
-       </div>
-
-       {/* Add Form Area */}
-       <div className={`transition-all duration-300 overflow-hidden ${isAdding ? 'max-h-[500px] opacity-100 mb-8' : 'max-h-0 opacity-0'}`}>
-          <div className="bg-white dark:bg-[#292524] p-6 rounded-2xl border border-stone-200 dark:border-stone-700 shadow-sm grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 items-end">
-            <div className="col-span-1 md:col-span-2">
-              <label className="text-xs text-stone-500 font-bold uppercase ml-1 mb-1 block">{t.brand}</label>
-              <input value={brand} onChange={e => setBrand(e.target.value)} placeholder="e.g. Blue Bottle" className="w-full p-3 bg-stone-50 dark:bg-stone-800 rounded-xl border-none text-[#3E2723] dark:text-stone-200 placeholder-stone-400 focus:ring-2 focus:ring-[#5C4033]/20" />
-            </div>
-            <div className="col-span-1 md:col-span-2">
-              <label className="text-xs text-stone-500 font-bold uppercase ml-1 mb-1 block">{t.beanName}</label>
-              <input value={name} onChange={e => setName(e.target.value)} placeholder="e.g. Bella Donovan" className="w-full p-3 bg-stone-50 dark:bg-stone-800 rounded-xl border-none text-[#3E2723] dark:text-stone-200 placeholder-stone-400 focus:ring-2 focus:ring-[#5C4033]/20" />
-            </div>
-            <div>
-              <label className="text-xs text-stone-500 font-bold uppercase ml-1 mb-1 block">{t.roast}</label>
-              <select value={roast} onChange={e => setRoast(e.target.value as any)} className="w-full p-3 bg-stone-50 dark:bg-stone-800 rounded-xl border-none text-[#3E2723] dark:text-stone-200">{(['light', 'medium', 'dark'] as const).map(r => <option key={r} value={r}>{t[r]}</option>)}</select>
-            </div>
-            <div>
-              <label className="text-xs text-stone-500 font-bold uppercase ml-1 mb-1 block">{t.process}</label>
-              <select value={process} onChange={e => setProcess(e.target.value as any)} className="w-full p-3 bg-stone-50 dark:bg-stone-800 rounded-xl border-none text-[#3E2723] dark:text-stone-200">{(['washed', 'natural', 'honey', 'anaerobic', 'other'] as const).map(p => <option key={p} value={p}>{t[p]}</option>)}</select>
-            </div>
-            <div>
-              <label className="text-xs text-stone-500 font-bold uppercase ml-1 mb-1 block">{t.weight}</label>
-              <div className="relative">
-                <input type="number" value={weight} onChange={e => setWeight(Number(e.target.value))} className="w-full p-3 bg-stone-50 dark:bg-stone-800 rounded-xl border-none text-[#3E2723] dark:text-stone-200 font-bold" />
-                <span className="absolute right-4 top-3 text-stone-400 text-sm">{t.grams}</span>
-              </div>
-            </div>
-            <button onClick={submit} disabled={!brand || !name} className="p-3 bg-stone-800 dark:bg-stone-700 text-white font-bold rounded-xl hover:bg-black disabled:opacity-50">{t.save}</button>
-          </div>
        </div>
 
        {/* Bean Grid */}
        {Object.keys(groupedBeans).length === 0 ? (
          <div className="flex flex-col items-center justify-center flex-1 text-stone-400 opacity-50">
-           <div className="text-6xl mb-4">🫘</div>
+           <div className="mb-4 text-stone-300 dark:text-stone-700">
+             <Icons.Bean className="w-24 h-24" />
+           </div>
            <p>Your inventory is empty.</p>
          </div>
        ) : (
          <div className="space-y-8 pb-20">
-            {Object.entries(groupedBeans).map(([groupBrand, groupBeans]) => (
+            {Object.entries(groupedBeans).map(([groupBrand, groupBeans]: [string, Bean[]]) => (
               <div key={groupBrand}>
                 <h3 className="text-lg font-bold text-stone-400 mb-3 px-1">{groupBrand}</h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
@@ -866,7 +882,7 @@ const InventoryView = ({ beans, onAdd, onToggle, onSaveReview, defaultReviewMode
                           {b.review ? (
                              <div className="flex items-center gap-2">
                                {b.review.mode === 'casual' && <div className="flex text-amber-400 text-xs"><Icons.Star filled /> <span className="text-stone-600 dark:text-stone-300 ml-1 font-bold">{b.review.rating}</span></div>}
-                               {b.review.mode === 'barista' && <div className="text-xs font-bold text-stone-600 dark:text-stone-300">{(Object.values(b.review.baristaScore || {}).reduce((a, b) => a + b, 0) / 5).toFixed(1)} / 5</div>}
+                               {b.review.mode === 'barista' && <div className="text-xs font-bold text-stone-600 dark:text-stone-300">{((Object.values(b.review.baristaScore || {}) as number[]).reduce((a: number, b: number) => a + b, 0) / 5).toFixed(1)} / 5</div>}
                                {b.review.mode === 'expert' && <div className="text-xs font-black text-[#5C4033] dark:text-[#a68b7c]">{b.review.expertScore?.total} pts</div>}
                                
                                {b.review.rebuy && <span className="text-xs bg-[#5C4033] text-white px-1.5 py-0.5 rounded-md flex items-center gap-1">👍</span>}
@@ -889,11 +905,18 @@ const InventoryView = ({ beans, onAdd, onToggle, onSaveReview, defaultReviewMode
             ))}
          </div>
        )}
+       
+       {/* Add Bean Modal */}
+       {isAdding && (
+          <Modal title={t.addNewBean} onClose={() => setIsAdding(false)}>
+             <AddBeanForm />
+          </Modal>
+       )}
 
        {reviewingBean && (
          <Modal title={reviewingBean.review ? t.editReview : t.review} onClose={() => setReviewingBean(null)}>
             <ReviewModalContent 
-               bean={reviewingBean} 
+               initialReview={reviewingBean.review} 
                defaultMode={defaultReviewMode}
                t={t} 
                onSave={(review) => {
@@ -903,6 +926,123 @@ const InventoryView = ({ beans, onAdd, onToggle, onSaveReview, defaultReviewMode
             />
          </Modal>
        )}
+    </div>
+  );
+};
+
+const HistoryList = ({ logs, beans, lang, settings, onReview, onDelete }: { logs: CoffeeLog[], beans: Bean[], lang: Language, settings: AppSettings, onReview: (l: CoffeeLog) => void, onDelete: (id: string) => void }) => {
+  const t = DICTIONARY[lang];
+  return (
+    <div className="space-y-3 no-scrollbar pb-20 lg:pb-0">
+       {logs.length === 0 ? (
+          <div className="text-center py-10 text-stone-400 flex flex-col items-center gap-2">
+            <span className="text-2xl">☕️</span>
+            <p className="text-sm">{t.noLogs}</p>
+          </div>
+       ) : (
+         logs.map(log => {
+            const bean = beans.find(b => b.id === log.beanId);
+            const displayBrand = log.type === 'store' 
+              ? (log.storeBrand ? getBrandName(log.storeBrand, settings.language) : 'Unknown')
+              : (bean ? bean.brand : 'Unknown Bean');
+            return (
+              <div key={log.id} className="relative group bg-white dark:bg-[#292524] p-4 rounded-xl border border-stone-100 dark:border-stone-700 shadow-sm flex justify-between items-center hover:border-stone-300 dark:hover:border-stone-600 transition-all">
+                <div className="flex items-center gap-3">
+                  <div className={`w-10 h-10 rounded-xl flex items-center justify-center text-lg shrink-0 ${log.type === 'store' ? 'bg-green-50 text-green-700' : 'bg-orange-50 text-orange-700'}`}>{log.type === 'store' ? '🏪' : '🏠'}</div>
+                  <div className="min-w-0">
+                    <div className="flex items-center gap-2">
+                       <div className="font-bold text-stone-800 dark:text-stone-200 text-sm truncate">{displayBrand}</div>
+                       {log.review && (
+                         <div className="flex items-center gap-1">
+                           {log.review.rating && <div className="flex text-amber-400 text-[10px]"><Icons.Star filled className="w-3 h-3"/> <span className="text-stone-500 ml-0.5">{log.review.rating}</span></div>}
+                           {log.review.rebuy && <span className="text-[10px]">👍</span>}
+                         </div>
+                       )}
+                    </div>
+                    <div className="text-xs text-stone-500 truncate">{log.type === 'store' ? log.productName : `${bean?.name || ''} • ${log.method ? BREW_METHODS[log.method].label[settings.language] : ''}${log.beanWeight ? ` • ${log.beanWeight}g` : ''}`}</div>
+                  </div>
+                </div>
+                <div className="text-right shrink-0">
+                   <div className="font-bold text-[#5C4033] dark:text-[#a68b7c] text-sm">{log.caffeineMg}<span className="text-[10px] font-normal text-stone-400 ml-0.5">mg</span></div>
+                   <div className="text-[10px] text-stone-400">{formatDate(log.timestamp, settings.language)}</div>
+                </div>
+                
+                {/* Actions: Review & Delete */}
+                <div className="absolute right-2 top-2 flex gap-1 opacity-100 lg:opacity-0 lg:group-hover:opacity-100 transition-all">
+                  <button onClick={(e) => { e.stopPropagation(); onReview(log); }} className="p-1.5 text-stone-300 hover:text-[#5C4033] bg-white dark:bg-stone-800 shadow-sm rounded-lg transition-all"><Icons.Review className="w-4 h-4" /></button>
+                  <button onClick={(e) => { e.stopPropagation(); onDelete(log.id); }} className="p-1.5 text-stone-300 hover:text-red-500 bg-white dark:bg-stone-800 shadow-sm rounded-lg transition-all"><Icons.Trash className="w-4 h-4" /></button>
+                </div>
+              </div>
+            );
+         })
+       )}
+    </div>
+  );
+};
+
+const DashboardLayout = ({ logs, filteredLogs, beans, settings, onSelectDate, selectedDate, searchQuery, setSearchQuery, onReview, onDelete, activeView }: {
+    logs: CoffeeLog[], filteredLogs: CoffeeLog[], beans: Bean[], settings: AppSettings, onSelectDate: (d: Date | null) => void, selectedDate: Date | null, searchQuery: string, setSearchQuery: (q: string) => void, onReview: (l: CoffeeLog) => void, onDelete: (id: string) => void, activeView: ViewState
+}) => {
+  const t = DICTIONARY[settings.language];
+  const currentLevel = calculateCurrentLevel(logs, settings.caffeineHalfLife);
+  const todayTotal = getTodayTotal(logs);
+
+  return (
+    <div className="h-full grid lg:grid-cols-[400px_1fr]">
+        {/* Middle Column (Manager) - Desktop Only (Shows as Main on Mobile/Tablet if Tab=History) */}
+        <div className={`flex-col h-full bg-[#FDFBF7] dark:bg-[#1c1917] border-r border-stone-200 dark:border-stone-800 overflow-hidden transition-colors ${activeView === 'dashboard' ? 'hidden lg:flex' : 'flex'}`}>
+          <div className="p-4 md:p-6 space-y-4 h-full flex flex-col">
+            <div className="relative shrink-0">
+              <div className="absolute left-3 top-1/2 -translate-y-1/2 text-stone-400 pointer-events-none">
+                <Icons.Search />
+              </div>
+              <input 
+                type="text" 
+                placeholder={t.searchPlaceholder} 
+                value={searchQuery}
+                onChange={e => setSearchQuery(e.target.value)}
+                className="w-full pl-10 p-3 rounded-xl border border-stone-200 dark:border-stone-700 bg-white dark:bg-[#292524] text-[#3E2723] dark:text-stone-200 focus:ring-2 focus:ring-[#5C4033]/20 outline-none"
+              />
+            </div>
+            
+            <Calendar logs={logs} selectedDate={selectedDate} onSelectDate={onSelectDate} lang={settings.language} />
+            
+            <div className="flex-1 overflow-y-auto no-scrollbar">
+              <div className="flex justify-between items-center mb-2 px-1 sticky top-0 bg-[#FDFBF7] dark:bg-[#1c1917] py-2 z-10">
+                <h3 className="font-bold text-stone-700 dark:text-stone-300">{selectedDate ? formatDate(selectedDate.getTime(), settings.language) : t.allHistory}</h3>
+                <span className="text-xs bg-stone-200 dark:bg-stone-800 text-stone-600 dark:text-stone-400 px-2 py-0.5 rounded-full">{filteredLogs.length}</span>
+              </div>
+              <HistoryList logs={filteredLogs} beans={beans} lang={settings.language} settings={settings} onReview={onReview} onDelete={onDelete} />
+            </div>
+          </div>
+        </div>
+
+        {/* Right Column (Dashboard) - Desktop Only (Shows as Main on Mobile/Tablet if Tab=Dashboard) */}
+        <div className={`flex-col h-full overflow-y-auto no-scrollbar p-4 md:p-8 space-y-6 bg-[#FDFBF7] dark:bg-[#1c1917] transition-colors ${activeView === 'dashboard' ? 'flex' : 'hidden lg:flex'}`}>
+          <div className="bg-white dark:bg-[#292524] p-8 rounded-3xl shadow-sm border border-stone-100 dark:border-stone-700 text-center flex flex-col justify-center relative overflow-hidden group min-h-[250px] shrink-0 transition-colors">
+            <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-[#5C4033] to-[#8c7a6b]"></div>
+            <div className="text-sm font-semibold text-stone-400 uppercase tracking-widest mb-4">{t.currentLevel}</div>
+            <div className="flex items-baseline justify-center gap-2 mb-4">
+              <span className="text-8xl font-black text-[#5C4033] dark:text-[#a68b7c] tracking-tighter">{currentLevel}</span>
+              <span className="text-2xl font-bold text-stone-400">mg</span>
+            </div>
+            <div className="flex flex-col items-center justify-center gap-3 text-sm text-stone-500 max-w-xs mx-auto w-full">
+               <div className="flex justify-between w-full px-2 text-xs font-bold text-stone-400 uppercase tracking-wide">
+                 <span>{t.todayTotal}</span>
+                 <span>{Math.round((todayTotal / settings.dailyLimit) * 100)}%</span>
+               </div>
+               <div className="w-full bg-stone-100 dark:bg-stone-800 h-3 rounded-full overflow-hidden">
+                 <div className="bg-[#5C4033] dark:bg-[#a68b7c] h-full rounded-full transition-all duration-500" style={{ width: `${Math.min((todayTotal / settings.dailyLimit) * 100, 100)}%` }}></div>
+               </div>
+               <div className="text-xs text-stone-400">{todayTotal} / {settings.dailyLimit} mg</div>
+            </div>
+            {currentLevel > settings.safeSleepThreshold * 2 && <div className="mt-6 inline-flex mx-auto items-center gap-2 bg-amber-50 dark:bg-amber-900/30 text-amber-700 dark:text-amber-500 text-sm px-4 py-2 rounded-xl border border-amber-100 dark:border-amber-800 font-medium animate-pulse">⚠️ {t.sleepWarning}</div>}
+          </div>
+
+          <div className="flex-1 min-h-[300px]">
+             <CaffeineChart logs={logs} halfLife={settings.caffeineHalfLife} lang={settings.language} />
+          </div>
+        </div>
     </div>
   );
 };
@@ -920,6 +1060,7 @@ export default function App() {
   // Navigation State
   const [view, setView] = useState<ViewState>('dashboard'); // View control
   const [showLogModal, setShowLogModal] = useState(false);
+  const [reviewingLog, setReviewingLog] = useState<CoffeeLog | null>(null);
   
   // Manager State
   const [searchQuery, setSearchQuery] = useState('');
@@ -1002,8 +1143,24 @@ export default function App() {
     setShowLogModal(false);
   };
 
+  const handleSaveLogReview = (logId: string, review: BeanReview) => {
+    setLogs((prev: CoffeeLog[]) => prev.map(l => l.id === logId ? { ...l, review } : l));
+  };
+
   const handleDeleteLog = (id: string) => {
-    if (confirm('Delete this record?')) setLogs(prev => prev.filter(l => l.id !== id));
+    if (confirm(DICTIONARY[settings.language].deleteConfirm)) {
+      // Restore inventory if it was a homemade log with a bean attached
+      const logToDelete = logs.find(l => l.id === id);
+      if (logToDelete && logToDelete.type === 'homemade' && logToDelete.beanId && logToDelete.beanWeight) {
+        setBeans(prevBeans => prevBeans.map(bean => {
+          if (bean.id === logToDelete.beanId) {
+            return { ...bean, weight: bean.weight + (logToDelete.beanWeight || 0) };
+          }
+          return bean;
+        }));
+      }
+      setLogs(prev => prev.filter(l => l.id !== id));
+    }
   };
 
   const handleAddBean = (beanData: Omit<Bean, 'id' | 'isActive'>) => {
@@ -1323,114 +1480,6 @@ export default function App() {
     </div>
   );
 
-  const HistoryList = () => (
-    <div className="space-y-3 no-scrollbar pb-20 lg:pb-0">
-       {filteredLogs.length === 0 ? (
-          <div className="text-center py-10 text-stone-400 flex flex-col items-center gap-2">
-            <span className="text-2xl">☕️</span>
-            <p className="text-sm">{t.noLogs}</p>
-          </div>
-       ) : (
-         filteredLogs.map(log => {
-            const bean = beans.find(b => b.id === log.beanId);
-            const displayBrand = log.type === 'store' 
-              ? (log.storeBrand ? getBrandName(log.storeBrand, settings.language) : 'Unknown')
-              : (bean ? bean.brand : 'Unknown Bean');
-            return (
-              <div key={log.id} className="relative group bg-white dark:bg-[#292524] p-4 rounded-xl border border-stone-100 dark:border-stone-700 shadow-sm flex justify-between items-center hover:border-stone-300 dark:hover:border-stone-600 transition-all">
-                <div className="flex items-center gap-3">
-                  <div className={`w-10 h-10 rounded-xl flex items-center justify-center text-lg shrink-0 ${log.type === 'store' ? 'bg-green-50 text-green-700' : 'bg-orange-50 text-orange-700'}`}>{log.type === 'store' ? '🏪' : '🏠'}</div>
-                  <div className="min-w-0">
-                    <div className="font-bold text-stone-800 dark:text-stone-200 text-sm truncate">{displayBrand}</div>
-                    <div className="text-xs text-stone-500 truncate">{log.type === 'store' ? log.productName : `${bean?.name || ''} • ${log.method ? BREW_METHODS[log.method].label[settings.language] : ''}${log.beanWeight ? ` • ${log.beanWeight}g` : ''}`}</div>
-                  </div>
-                </div>
-                <div className="text-right shrink-0">
-                   <div className="font-bold text-[#5C4033] dark:text-[#a68b7c] text-sm">{log.caffeineMg}<span className="text-[10px] font-normal text-stone-400 ml-0.5">mg</span></div>
-                   <div className="text-[10px] text-stone-400">{formatDate(log.timestamp, settings.language)}</div>
-                </div>
-                <button onClick={(e) => { e.stopPropagation(); handleDeleteLog(log.id); }} className="absolute right-2 top-2 p-1.5 opacity-0 group-hover:opacity-100 text-stone-300 hover:text-red-500 bg-white dark:bg-stone-800 shadow-sm rounded-lg transition-all"><Icons.Trash /></button>
-              </div>
-            );
-         })
-       )}
-    </div>
-  );
-
-  const DashboardLayout = () => (
-    <div className="h-full grid lg:grid-cols-[400px_1fr]">
-        {/* Middle Column (Manager) - Desktop Only (Shows as Main on Mobile/Tablet if Tab=History) */}
-        <div className={`
-          flex flex-col h-full bg-[#FDFBF7] dark:bg-[#1c1917] border-r border-stone-200 dark:border-stone-800 overflow-hidden transition-colors
-          ${view === 'calendar' ? 'block' : 'hidden lg:flex'} 
-          ${view !== 'calendar' && 'lg:flex'}
-        `}>
-          <div className="p-4 md:p-6 space-y-4 h-full flex flex-col">
-            <div className="relative shrink-0">
-              <div className="absolute left-3 top-1/2 -translate-y-1/2 text-stone-400 pointer-events-none">
-                <Icons.Search />
-              </div>
-              <input 
-                type="text" 
-                placeholder={t.searchPlaceholder} 
-                value={searchQuery}
-                onChange={e => setSearchQuery(e.target.value)}
-                className="w-full pl-10 p-3 rounded-xl border border-stone-200 dark:border-stone-700 bg-white dark:bg-[#292524] text-[#3E2723] dark:text-stone-200 focus:ring-2 focus:ring-[#5C4033]/20 outline-none"
-              />
-            </div>
-            
-            <Calendar logs={logs} selectedDate={selectedDate} onSelectDate={setSelectedDate} lang={settings.language} />
-            
-            <div className="flex-1 overflow-y-auto no-scrollbar">
-              <div className="flex justify-between items-center mb-2 px-1 sticky top-0 bg-[#FDFBF7] dark:bg-[#1c1917] py-2 z-10">
-                <h3 className="font-bold text-stone-700 dark:text-stone-300">{selectedDate ? formatDate(selectedDate.getTime(), settings.language) : t.allHistory}</h3>
-                <span className="text-xs bg-stone-200 dark:bg-stone-800 text-stone-600 dark:text-stone-400 px-2 py-0.5 rounded-full">{filteredLogs.length}</span>
-              </div>
-              <HistoryList />
-            </div>
-          </div>
-        </div>
-
-        {/* Right Column (Dashboard) - Desktop Only (Shows as Main on Mobile/Tablet if Tab=Dashboard) */}
-        <div className={`
-          flex flex-col h-full overflow-y-auto no-scrollbar p-4 md:p-8 space-y-6 bg-[#FDFBF7] dark:bg-[#1c1917] transition-colors
-          ${view === 'dashboard' ? 'block' : 'hidden lg:block'}
-        `}>
-          {/* Mobile Header */}
-          <header className="lg:hidden flex items-center justify-between mb-6">
-             <div className="flex items-center gap-2">
-               <div className="w-8 h-8 bg-[#5C4033] text-white rounded-lg flex items-center justify-center"><Icons.Coffee /></div>
-               <h1 className="font-bold text-xl tracking-tight text-[#3E2723] dark:text-stone-200">Barista</h1>
-             </div>
-          </header>
-
-          <div className="bg-white dark:bg-[#292524] p-8 rounded-3xl shadow-sm border border-stone-100 dark:border-stone-700 text-center flex flex-col justify-center relative overflow-hidden group min-h-[250px] shrink-0 transition-colors">
-            <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-[#5C4033] to-[#8c7a6b]"></div>
-            <div className="text-sm font-semibold text-stone-400 uppercase tracking-widest mb-4">{t.currentLevel}</div>
-            <div className="flex items-baseline justify-center gap-2 mb-4">
-              <span className="text-8xl font-black text-[#5C4033] dark:text-[#a68b7c] tracking-tighter">{currentLevel}</span>
-              <span className="text-2xl font-bold text-stone-400">mg</span>
-            </div>
-            <div className="flex flex-col items-center justify-center gap-3 text-sm text-stone-500 max-w-xs mx-auto w-full">
-               <div className="flex justify-between w-full px-2 text-xs font-bold text-stone-400 uppercase tracking-wide">
-                 <span>{t.todayTotal}</span>
-                 <span>{Math.round((todayTotal / settings.dailyLimit) * 100)}%</span>
-               </div>
-               <div className="w-full bg-stone-100 dark:bg-stone-800 h-3 rounded-full overflow-hidden">
-                 <div className="bg-[#5C4033] dark:bg-[#a68b7c] h-full rounded-full transition-all duration-500" style={{ width: `${Math.min((todayTotal / settings.dailyLimit) * 100, 100)}%` }}></div>
-               </div>
-               <div className="text-xs text-stone-400">{todayTotal} / {settings.dailyLimit} mg</div>
-            </div>
-            {currentLevel > settings.safeSleepThreshold * 2 && <div className="mt-6 inline-flex mx-auto items-center gap-2 bg-amber-50 dark:bg-amber-900/30 text-amber-700 dark:text-amber-500 text-sm px-4 py-2 rounded-xl border border-amber-100 dark:border-amber-800 font-medium animate-pulse">⚠️ {t.sleepWarning}</div>}
-          </div>
-
-          <div className="flex-1 min-h-[300px]">
-             <CaffeineChart logs={logs} halfLife={settings.caffeineHalfLife} lang={settings.language} />
-          </div>
-        </div>
-    </div>
-  );
-
   // --- Main Render ---
 
   return (
@@ -1454,7 +1503,21 @@ export default function App() {
       <div className="lg:pl-[240px] h-screen overflow-hidden">
         
         {/* View Switcher */}
-        {(view === 'dashboard' || view === 'calendar') && <DashboardLayout />}
+        {(view === 'dashboard' || view === 'calendar') && (
+            <DashboardLayout 
+               logs={logs}
+               filteredLogs={filteredLogs}
+               beans={beans}
+               settings={settings}
+               onSelectDate={setSelectedDate}
+               selectedDate={selectedDate}
+               searchQuery={searchQuery}
+               setSearchQuery={setSearchQuery}
+               onReview={setReviewingLog}
+               onDelete={handleDeleteLog}
+               activeView={view}
+            />
+        )}
         
         {view === 'inventory' && (
            <InventoryView beans={beans} onAdd={handleAddBean} onToggle={toggleBeanStatus} onSaveReview={handleSaveReview} defaultReviewMode={settings.defaultReviewMode} t={t} />
@@ -1471,7 +1534,21 @@ export default function App() {
 
         {/* Mobile/Tablet Views Container */}
         <div className="lg:hidden h-full overflow-y-auto pb-24 bg-[#FDFBF7] dark:bg-[#1c1917] transition-colors">
-           {(view === 'dashboard' || view === 'calendar') && <DashboardLayout />}
+           {(view === 'dashboard' || view === 'calendar') && (
+              <DashboardLayout 
+               logs={logs}
+               filteredLogs={filteredLogs}
+               beans={beans}
+               settings={settings}
+               onSelectDate={setSelectedDate}
+               selectedDate={selectedDate}
+               searchQuery={searchQuery}
+               setSearchQuery={setSearchQuery}
+               onReview={setReviewingLog}
+               onDelete={handleDeleteLog}
+               activeView={view}
+              />
+           )}
            {view === 'inventory' && <InventoryView beans={beans} onAdd={handleAddBean} onToggle={toggleBeanStatus} onSaveReview={handleSaveReview} defaultReviewMode={settings.defaultReviewMode} t={t} />}
            {view === 'settings' && <div className="p-4"><h2 className="text-2xl font-bold mb-4 text-[#3E2723] dark:text-stone-200">{t.settings}</h2><SettingsContent /></div>}
         </div>
@@ -1483,6 +1560,21 @@ export default function App() {
 
       {/* Log Modal (Global) */}
       {showLogModal && <Modal title={t.addLog} onClose={() => setShowLogModal(false)}><LogModalContent /></Modal>}
+      
+      {/* Review Log Modal */}
+      {reviewingLog && (
+        <Modal title={t.review} onClose={() => setReviewingLog(null)}>
+           <ReviewModalContent 
+              initialReview={reviewingLog.review}
+              defaultMode={settings.defaultReviewMode}
+              t={t}
+              onSave={(review) => {
+                 handleSaveLogReview(reviewingLog.id, review);
+                 setReviewingLog(null);
+              }}
+           />
+        </Modal>
+      )}
 
     </div>
   );
