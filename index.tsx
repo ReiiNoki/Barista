@@ -211,7 +211,7 @@ export default function App() {
             <button onClick={() => setView('inventory')} className={`w-full flex items-center gap-3 px-4 py-3 font-medium rounded-xl transition-all ${view === 'inventory' ? 'bg-stone-100 dark:bg-stone-800 text-[#5C4033] dark:text-[#a68b7c]' : 'text-stone-500 hover:text-stone-800 dark:hover:text-stone-200 hover:bg-stone-50 dark:hover:bg-stone-800'}`}><Icons.Bean /> {t.inventory}</button>
             <button onClick={() => setView('settings')} className={`w-full flex items-center gap-3 px-4 py-3 font-medium rounded-xl transition-all ${view === 'settings' ? 'bg-stone-100 dark:bg-stone-800 text-[#5C4033] dark:text-[#a68b7c]' : 'text-stone-500 hover:text-stone-800 dark:hover:text-stone-200 hover:bg-stone-50 dark:hover:bg-stone-800'}`}><Icons.Settings /> {t.settings}</button>
          </nav>
-         <button onClick={() => setShowLogModal(true)} className="w-full py-4 bg-[#5C4033] text-white font-bold rounded-xl shadow-lg hover:bg-[#4a332a] flex items-center justify-center gap-2"><Icons.Plus /> {t.addLog}</button>
+         <button onClick={() => setShowLogModal(true)} className="w-full py-4 bg-[#5C4033] text-white font-bold rounded-xl shadow-lg hover:bg-[#4a332a] flex items-center justify-center gap-2" aria-label={t.addLog}><Icons.Plus /></button>
       </aside>
 
       {/* Main Content Area */}

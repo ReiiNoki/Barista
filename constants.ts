@@ -41,7 +41,7 @@ export const FLAVOR_TAGS = ['Fruity', 'Floral', 'Nutty', 'Cocoa', 'Spicy', 'Herb
 export const DICTIONARY = {
   en: {
     dashboard: 'Dashboard',
-    addLog: 'Log Coffee',
+    addLog: 'Add',
     inventory: 'Beans',
     settings: 'Settings',
     currentLevel: 'Caffeine Level',

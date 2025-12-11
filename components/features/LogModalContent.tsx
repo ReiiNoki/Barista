@@ -40,6 +40,14 @@ export const LogModalContent = ({ onAddLog, onAddCustomBrand, handleDeleteCustom
     const activeBeans = beans.filter(b => b.isActive);
     const selectedBean = beans.find(b => b.id === selectedBeanId);
 
+    // Time Selection Helpers
+    const hours = Array.from({ length: 24 }, (_, i) => i.toString().padStart(2, '0'));
+    // Use 5-minute steps for cleaner UI, or 1-minute for precision. Let's use 1-minute to match previous precision.
+    const minutes = Array.from({ length: 60 }, (_, i) => i.toString().padStart(2, '0'));
+
+    const [datePart, timePart] = logDate.split('T');
+    const [currentHour, currentMinute] = timePart ? timePart.split(':') : ['00', '00'];
+
     useEffect(() => {
       if (mode === 'homemade') {
         setCaffeine(BREW_METHODS[method].caffeineFactor);
@@ -129,11 +137,47 @@ export const LogModalContent = ({ onAddLog, onAddCustomBrand, handleDeleteCustom
       });
     };
 
+    const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+       setLogDate(`${e.target.value}T${timePart}`);
+    };
+
+    const handleHourChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+       setLogDate(`${datePart}T${e.target.value}:${currentMinute}`);
+    };
+
+    const handleMinuteChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+       setLogDate(`${datePart}T${currentHour}:${e.target.value}`);
+    };
+
     return (
       <div className="space-y-6">
         <div>
           <label className="block text-sm font-medium text-stone-600 dark:text-stone-400 mb-1">{t.date}</label>
-          <input type="datetime-local" value={logDate} onChange={e => setLogDate(e.target.value)} className="w-full p-3 rounded-lg border border-stone-200 dark:border-stone-700 bg-white dark:bg-stone-800 text-[#3E2723] dark:text-stone-200" />
+          <div className="flex gap-2">
+            <input 
+              type="date" 
+              value={datePart} 
+              onChange={handleDateChange} 
+              className="flex-[2] p-3 rounded-lg border border-stone-200 dark:border-stone-700 bg-white dark:bg-stone-800 text-[#3E2723] dark:text-stone-200" 
+            />
+            <div className="flex flex-1 items-center gap-1 bg-[#5C4033] rounded-lg shadow-sm p-1">
+               <select 
+                 value={currentHour} 
+                 onChange={handleHourChange}
+                 className="w-full h-full bg-transparent text-center outline-none text-[#FDFBF7] font-bold"
+               >
+                 {hours.map(h => <option key={h} value={h} className="text-stone-800">{h}</option>)}
+               </select>
+               <span className="text-[#FDFBF7]/60 font-bold">:</span>
+               <select 
+                 value={currentMinute} 
+                 onChange={handleMinuteChange}
+                 className="w-full h-full bg-transparent text-center outline-none text-[#FDFBF7] font-bold"
+               >
+                 {minutes.map(m => <option key={m} value={m} className="text-stone-800">{m}</option>)}
+               </select>
+            </div>
+          </div>
         </div>
         <div className="flex bg-stone-100 dark:bg-stone-800 p-1 rounded-lg">
           {(['store', 'homemade'] as const).map((m) => (
