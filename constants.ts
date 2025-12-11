@@ -40,7 +40,7 @@ export const FLAVOR_TAGS = ['Fruity', 'Floral', 'Nutty', 'Cocoa', 'Spicy', 'Herb
 
 export const DICTIONARY = {
   en: {
-    dashboard: 'Dashboard',
+    dashboard: 'Caffeine',
     addLog: 'Add',
     inventory: 'Beans',
     settings: 'Settings',
@@ -140,7 +140,7 @@ export const DICTIONARY = {
     invalidFile: 'Invalid JSON file.',
   },
   zh: {
-    dashboard: '概览',
+    dashboard: '咖啡因',
     addLog: '记录',
     inventory: '豆仓',
     settings: '设置',
@@ -240,7 +240,7 @@ export const DICTIONARY = {
     invalidFile: '无效的 JSON 文件。',
   },
   ja: {
-    dashboard: 'ホーム',
+    dashboard: 'カフェイン',
     addLog: '記録',
     inventory: '豆リスト',
     settings: '設定',
